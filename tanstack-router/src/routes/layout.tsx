@@ -21,7 +21,11 @@ function LayoutComponent() {
         <Link to="/countries" activeProps={{ className: "font-bold" }}>
           Countries
         </Link>
-        <Link to="/suspense" activeProps={{ className: "font-bold" }}>
+        <Link
+          to="/suspense"
+          search={{ code: "en" }}
+          activeProps={{ className: "font-bold" }}
+        >
           Suspense
         </Link>
       </div>

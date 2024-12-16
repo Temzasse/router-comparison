@@ -1,6 +1,7 @@
-import { gql, useReadQuery } from "@apollo/client";
+import { useDeferredValue, useTransition, type FormEvent } from "react";
+import { gql, useReadQuery, useSuspenseQuery } from "@apollo/client";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useTransition, type FormEvent } from "react";
+import { equal } from "@wry/equality";
 
 const GET_LANGUAGE = gql`
   query Language($code: ID!) {
@@ -44,9 +45,11 @@ export const Route = createFileRoute("/_layout/suspense")({
 
 function RouteComponent() {
   const search = Route.useSearch();
-  const [isPending, startTransition] = useTransition();
   const { queryRef } = Route.useLoaderData();
-  const { data } = useReadQuery(queryRef);
+  const deferredQueryRef = useDeferredValue(queryRef);
+  const { data } = useReadQuery(deferredQueryRef);
+  // const [isPending, startTransition] = useTransition();
+  const isPending = !equal(queryRef, deferredQueryRef);
   const navigate = useNavigate({ from: Route.fullPath });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -59,20 +62,23 @@ function RouteComponent() {
 
     /**
      * --------------------------- ⚠️ Apollo issue ⚠️ --------------------------
-     * This should stop React from showing Suspense fallback but it doesn't.
-     * It seems that transitions are not well supported in Tanstack Router,
-     * so instead of wrapping the `navigate` call in `startTransition`, we
-     * should rely on `useDeferredValue` somehow to stop React from showing the
-     * Suspense fallback. But how do we do that with `useReadQuery`?
+     * Using `startTransition` should stop React from showing Suspense fallback
+     * but it doesn't. It seems that transitions are not well supported in
+     * Tanstack Router, so instead of wrapping the `navigate` call in
+     * `startTransition`, we should rely on `useDeferredValue` by deferring the
+     * `queryRef` to stop React from showing the Suspense fallback, but with
+     * that approach we lose the pending status...
      */
-    startTransition(() => {
-      navigate({
-        search: { code: data.get("code") as string },
-        replace: true,
-      });
+    // startTransition(() => {
+    navigate({
+      search: { code: data.get("code") as string },
+      replace: true,
     });
+    // });
     // ------------------------------------------------------------------------
   }
+
+  console.log("isPending", isPending);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
