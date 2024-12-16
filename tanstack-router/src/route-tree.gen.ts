@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/root'
 import { Route as layoutImport } from './routes/layout'
+import { Route as suspenseIssueImport } from './routes/suspense-issue'
 import { Route as profileImport } from './routes/profile'
 import { Route as aboutImport } from './routes/about'
 import { Route as indexImport } from './routes/index'
@@ -23,6 +24,12 @@ import { Route as countryDetailsCountryDetailsrouteImport } from './routes/count
 const layoutRoute = layoutImport.update({
   id: '/_layout',
   getParentRoute: () => rootRoute,
+} as any)
+
+const suspenseIssueRoute = suspenseIssueImport.update({
+  id: '/suspense',
+  path: '/suspense',
+  getParentRoute: () => layoutRoute,
 } as any)
 
 const profileRoute = profileImport.update({
@@ -96,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof profileImport
       parentRoute: typeof layoutImport
     }
+    '/_layout/suspense': {
+      id: '/_layout/suspense'
+      path: '/suspense'
+      fullPath: '/suspense'
+      preLoaderRoute: typeof suspenseIssueImport
+      parentRoute: typeof layoutImport
+    }
     '/_layout/countries_/$id': {
       id: '/_layout/countries_/$id'
       path: '/countries/$id'
@@ -113,6 +127,7 @@ interface layoutRouteChildren {
   indexRoute: typeof indexRoute
   aboutRoute: typeof aboutRoute
   profileRoute: typeof profileRoute
+  suspenseIssueRoute: typeof suspenseIssueRoute
   countryDetailsCountryDetailsrouteRoute: typeof countryDetailsCountryDetailsrouteRoute
 }
 
@@ -121,6 +136,7 @@ const layoutRouteChildren: layoutRouteChildren = {
   indexRoute: indexRoute,
   aboutRoute: aboutRoute,
   profileRoute: profileRoute,
+  suspenseIssueRoute: suspenseIssueRoute,
   countryDetailsCountryDetailsrouteRoute:
     countryDetailsCountryDetailsrouteRoute,
 }
@@ -134,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/': typeof indexRoute
   '/about': typeof aboutRoute
   '/profile': typeof profileRoute
+  '/suspense': typeof suspenseIssueRoute
   '/countries/$id': typeof countryDetailsCountryDetailsrouteRoute
 }
 
@@ -142,6 +159,7 @@ export interface FileRoutesByTo {
   '/': typeof indexRoute
   '/about': typeof aboutRoute
   '/profile': typeof profileRoute
+  '/suspense': typeof suspenseIssueRoute
   '/countries/$id': typeof countryDetailsCountryDetailsrouteRoute
 }
 
@@ -152,14 +170,28 @@ export interface FileRoutesById {
   '/_layout/': typeof indexRoute
   '/_layout/about': typeof aboutRoute
   '/_layout/profile': typeof profileRoute
+  '/_layout/suspense': typeof suspenseIssueRoute
   '/_layout/countries_/$id': typeof countryDetailsCountryDetailsrouteRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/countries' | '/' | '/about' | '/profile' | '/countries/$id'
+  fullPaths:
+    | ''
+    | '/countries'
+    | '/'
+    | '/about'
+    | '/profile'
+    | '/suspense'
+    | '/countries/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/countries' | '/' | '/about' | '/profile' | '/countries/$id'
+  to:
+    | '/countries'
+    | '/'
+    | '/about'
+    | '/profile'
+    | '/suspense'
+    | '/countries/$id'
   id:
     | '__root__'
     | '/_layout'
@@ -167,6 +199,7 @@ export interface FileRouteTypes {
     | '/_layout/'
     | '/_layout/about'
     | '/_layout/profile'
+    | '/_layout/suspense'
     | '/_layout/countries_/$id'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +232,7 @@ export const routeTree = rootRoute
         "/_layout/",
         "/_layout/about",
         "/_layout/profile",
+        "/_layout/suspense",
         "/_layout/countries_/$id"
       ]
     },
@@ -216,6 +250,10 @@ export const routeTree = rootRoute
     },
     "/_layout/profile": {
       "filePath": "profile.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/suspense": {
+      "filePath": "suspense-issue.tsx",
       "parent": "/_layout"
     },
     "/_layout/countries_/$id": {

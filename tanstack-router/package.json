@@ -11,18 +11,18 @@
     "start": "vite"
   },
   "dependencies": {
-    "@apollo/client": "3.11.10",
-    "@tanstack/react-router": "1.82.2",
-    "@tanstack/router-devtools": "1.82.2",
-    "graphql": "16.9.0",
+    "@apollo/client": "3.12.3",
+    "@tanstack/react-router": "1.90.0",
+    "@tanstack/router-devtools": "1.90.0",
+    "graphql": "16.10.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@tanstack/router-plugin": "1.81.9",
+    "@tanstack/router-plugin": "1.87.13",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@vitejs/plugin-react": "4.3.2",
+    "@vitejs/plugin-react": "4.3.4",
     "vite": "5.4.8"
   }
 }

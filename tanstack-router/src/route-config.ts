@@ -5,6 +5,7 @@ export const routeConfig = rootRoute("root.tsx", [
     index("index.tsx"),
     route("/about", "about.tsx"),
     route("/profile", "profile.tsx"),
+    route("/suspense", "suspense-issue.tsx"),
     route("/countries", "country-list/country-list.route.tsx"),
     route("/countries_/$id", "country-details/country-details.route.tsx"),
   ]),
