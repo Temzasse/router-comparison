@@ -11,7 +11,7 @@ const GET_LANGUAGE = gql`
   }
 `;
 
-type RouteSearch = { code?: string };
+type RouteSearch = { code: string };
 type Result = { language: { name: string } | null };
 type Variables = { code: string };
 
@@ -26,11 +26,11 @@ export const Route = createFileRoute("/_layout/suspense")({
   // **************************************************************************
   validateSearch: (search): RouteSearch => {
     return {
-      code: search.code as string | undefined,
+      code: (search.code as string | undefined) || "en",
     };
   },
   loaderDeps: ({ search }) => ({
-    code: search.code || "en",
+    code: search.code,
   }),
   loader: async ({ context, deps }) => {
     return {
@@ -96,7 +96,7 @@ function RouteComponent() {
           }}
         >
           <span>Enter a language code (e.g. en, ja, fi, sv)</span>
-          <input type="text" name="code" defaultValue={search.code ?? ""} />
+          <input type="text" name="code" defaultValue={search.code} />
         </label>
 
         <button type="submit">Search</button>
